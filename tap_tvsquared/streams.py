@@ -98,7 +98,7 @@ class BrandsStream(TVSquaredStream):
     def parse_response(self, response: requests.Response) -> Iterable[dict]:
         """Parse the response and return an iterator of result rows."""
         response_json = response.json()
-        response_json["partner_domain"] = context["partner_domain"]
+        response_json["partner_domain"] = self.config["partner_domain"]
         response_json["brand_id"] = context["brand_id"]
         yield from [response_json]
 
