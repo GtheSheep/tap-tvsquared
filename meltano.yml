@@ -1,0 +1,29 @@
+version: 1
+send_anonymous_usage_stats: true
+project_id: 13cfac27-bc43-44de-8a01-f0851ab7dd72
+plugins:
+  extractors:
+  - name: tap-tvsquared
+    namespace: tap_tvsquared
+    pip_url: -e .
+    capabilities:
+    - state
+    - catalog
+    - discover
+    settings:
+    - name: partner_domain
+    - name: username
+    - name: password
+      kind: password
+    - name: api_number
+    - name: start_date
+    config:
+      partner_domain:
+      api_number:
+      username:
+      password:
+      start_date: '2022-04-28T00:00:00Z'
+  loaders:
+  - name: target-jsonl
+    variant: andyh1203
+    pip_url: target-jsonl
