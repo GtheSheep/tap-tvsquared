@@ -95,12 +95,14 @@ class BrandsStream(TVSquaredStream):
                         continue
                     yield transformed_record
 
+    def post_process(self, row: dict, context: Optional[dict] = None) -> Optional[dict]:
+        row["partner_domain"] = context["partner_domain"]
+        row["brand_id"] = context["brand_id"]
+        return row
+
     def parse_response(self, response: requests.Response) -> Iterable[dict]:
         """Parse the response and return an iterator of result rows."""
-        response_json = response.json()
-        response_json["partner_domain"] = self.config["partner_domain"]
-        response_json["brand_id"] = context["brand_id"]
-        yield from [response_json]
+        yield from [response.json()]
 
 
 class SpotsStream(TVSquaredStream):
