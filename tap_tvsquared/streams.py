@@ -96,7 +96,7 @@ class BrandsStream(TVSquaredStream):
                     yield transformed_record
 
     def post_process(self, row: dict, context: Optional[dict] = None) -> Optional[dict]:
-        row["partner_domain"] = context["partner_domain"]
+        row["partner_domain"] = self.config["partner_domain"]
         row["brand_id"] = context["brand_id"]
         return row
 
@@ -161,6 +161,8 @@ class SpotsStream(TVSquaredStream):
 
     def post_process(self, row: dict, context: Optional[dict]) -> dict:
         row["datetime"] = datetime.datetime.strptime(context["datetime"], '%Y/%m/%d')
+        row["partner_domain"] = self.config["partner_domain"]
+        row["brand_id"] = context["brand_id"]
         return row
 
     def get_next_page_token(
@@ -244,6 +246,8 @@ class SpotColumnsStream(TVSquaredStream):
     def post_process(self, row: dict, context: Optional[dict]) -> dict:
         row["date_from"] = datetime.datetime.strptime(context["date_from"], '%Y/%m/%d')
         row["date_to"] = datetime.datetime.strptime(context["date_to"], '%Y/%m/%d')
+        row["partner_domain"] = self.config["partner_domain"]
+        row["brand_id"] = context["brand_id"]
         return row
 
     def get_next_page_token(
