@@ -110,8 +110,8 @@ class SpotsStream(TVSquaredStream):
     parent_stream_type = InventoryStream
     ignore_parent_replication_keys = True
     path = "/attribution/{partner_domain}/{brand_id}/spotsjson/{year}/{month}/{day}"
-    primary_keys = ["partner_domain", "brand_id", "datetime"]
-    state_partitioning_keys = ["partner_domain", "brand_id", "datetime"]
+    primary_keys = ["partner_domain", "brand_id", "datetime", "spotid"]
+    state_partitioning_keys = ["partner_domain", "brand_id", "datetime", "spotid"]
     replication_key = "datetime"
     records_jsonpath = "$.spots[*]"
     schema = th.PropertiesList(
