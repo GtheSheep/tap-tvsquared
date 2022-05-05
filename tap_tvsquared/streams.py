@@ -50,6 +50,7 @@ class BrandsStream(TVSquaredStream):
     ignore_parent_replication_keys = True
     path = "/attribution/{partner_domain}/{brand_id}"
     primary_keys = ["partner_domain", "brand_id"]
+    state_partitioning_keys = ["partner_domain", "brand_id"]
     replication_key = None
     records_jsonpath = "$."
     schema = th.PropertiesList(
