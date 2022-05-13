@@ -164,7 +164,7 @@ class SpotsStream(TVSquaredStream):
     def post_process(self, row: dict, context: Optional[dict]) -> dict:
         row["partner_domain"] = self.config["partner_domain"]
         row["brand_id"] = context["brand_id"]
-        row["date"] = context["date"]
+        row["date"] = datetime.datetime.strptime(context["date"], '%Y/%m/%d')
         return row
 
     def get_next_page_token(
