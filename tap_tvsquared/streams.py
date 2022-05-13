@@ -111,9 +111,9 @@ class SpotsStream(TVSquaredStream):
     parent_stream_type = InventoryStream
     ignore_parent_replication_keys = True
     path = "/attribution/{partner_domain}/{brand_id}/spotsjson/{year}/{month}/{day}"
-    primary_keys = ["partner_domain", "brand_id", "datetime", "spotid"]
-    state_partitioning_keys = ["partner_domain", "brand_id", "datetime", "spotid"]
-    replication_key = "datetime"
+    primary_keys = ["partner_domain", "brand_id", "datetime", "spotid", "date"]
+    state_partitioning_keys = ["partner_domain", "brand_id", "datetime", "spotid", "date"]
+    replication_key = "date"
     records_jsonpath = "$.spots[*]"
     schema = th.PropertiesList(
         th.Property("partner_domain", th.StringType),
@@ -124,6 +124,7 @@ class SpotsStream(TVSquaredStream):
         th.Property("length", th.NumberType),
         th.Property("saleshouse", th.StringType),
         th.Property("datetime", th.DateTimeType),
+        th.Property("date", th.DateTimeType),
         th.Property("spotid", th.NumberType),
         th.Property("daypart", th.StringType),
         th.Property("genre", th.StringType),
@@ -161,9 +162,9 @@ class SpotsStream(TVSquaredStream):
         yield from extract_jsonpath(self.records_jsonpath, input=response.json())
 
     def post_process(self, row: dict, context: Optional[dict]) -> dict:
-        row["datetime"] = datetime.datetime.strptime(context["datetime"], '%Y/%m/%d')
         row["partner_domain"] = self.config["partner_domain"]
         row["brand_id"] = context["brand_id"]
+        row["date"] = context["date"]
         return row
 
     def get_next_page_token(
@@ -181,7 +182,7 @@ class SpotsStream(TVSquaredStream):
         context["year"] = date.year
         context["month"] = date.month
         context["day"] = date.day
-        context["datetime"] = date.strftime('%Y/%m/%d')
+        context["date"] = date.strftime('%Y/%m/%d')
 
     def request_records(self, context: Optional[dict]) -> Iterable[dict]:
         next_page_token: Any = None
